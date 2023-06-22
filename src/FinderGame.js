@@ -23,7 +23,11 @@ function FinderGame() {
 
   function startTimer() {
     stopTimer();
-    timerId.current = setInterval(() => setTime(time + 1), 1000);
+    let timerCount = 0;
+    timerId.current = setInterval(() => {
+      timerCount++;
+      setTime(timerCount);
+    }, 1000);
   }
 
   function reset() {
