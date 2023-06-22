@@ -1,0 +1,42 @@
+
+.StatusBar {
+    padding: 0 200px;
+    width: 100%;
+    height: var(--status-bar-height);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.StatusBar-checklist {
+    display: flex;
+    align-items: center;
+}
+
+.StatusBar-checklist-item {
+    margin-left: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.StatusBar-found {
+    color: green;
+}
+
+.StatusBar-right {
+    display: flex;
+    align-items: center;
+}
+
+.StatusBar-time {
+    margin: 0 20px;
+}
+
+.StatusBar-checkmark {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: -20px;
+}

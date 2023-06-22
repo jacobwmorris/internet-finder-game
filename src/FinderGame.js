@@ -1,8 +1,9 @@
 import {useState, useRef} from "react";
+import StatusBar from "./StatusBar";
 
 const sampleChars = {
-  "Dramatic Chipmunk": {x: 0, y: 0, found: false},
-  "Chuck Testa": {x: 1, y: 0, found: false},
+  "Dramatic Chipmunk": {x: 0, y: 0, found: true},
+  "Chuck Testa": {x: 1, y: 0, found: true},
   "Mudkip": {x: 0, y: 1, found: false}
 }
 
@@ -62,7 +63,9 @@ function FinderGame() {
   }
 
   return (
-    <div></div>
+    <div>
+      <StatusBar characters={characters} time={time}/>
+    </div>
   );
 }
 
