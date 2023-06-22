@@ -1,5 +1,9 @@
 
-function StartDialog({characters, handleStart}) {
+function StartDialog({show, characters, handleStart}) {
+  if (!show) {
+    return null;
+  }
+
   const charactersRendered = Object.keys(characters).map((name) => {
     return <Portrait key={name} name={name}/>;
   });
@@ -16,7 +20,7 @@ function StartDialog({characters, handleStart}) {
         <div>
           {charactersRendered}
         </div>
-        <button onClick={(e) => handleStart()}></button>
+        <button onClick={(e) => handleStart()}>Start game</button>
       </div>
     </div>
   )

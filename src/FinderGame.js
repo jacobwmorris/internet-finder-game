@@ -1,5 +1,6 @@
 import {useState, useRef} from "react";
 import StatusBar from "./StatusBar";
+import StartDialog from "./StartDialog";
 
 const sampleChars = {
   "Dramatic Chipmunk": {x: 0, y: 0, found: true},
@@ -65,6 +66,7 @@ function FinderGame() {
   return (
     <div>
       <StatusBar characters={characters} time={time}/>
+      <StartDialog show={mode === "reset"} characters={characters} handleStart={start}/>
     </div>
   );
 }

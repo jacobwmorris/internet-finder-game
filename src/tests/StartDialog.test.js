@@ -11,7 +11,7 @@ const sampleChars = {
 }
 
 it("Renders character list", () => {
-  render(<StartDialog characters={sampleChars} handleStart={() => {}}/>);
+  render(<StartDialog show={true} characters={sampleChars} handleStart={() => {}}/>);
   expect(screen.getByText("Dramatic Chipmunk")).toBeInTheDocument();
   expect(screen.getByText("Chuck Testa")).toBeInTheDocument();
   expect(screen.getByText("Mudkip")).toBeInTheDocument();
