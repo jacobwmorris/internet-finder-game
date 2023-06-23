@@ -1,5 +1,6 @@
 import {useState, useRef} from "react";
 import StatusBar from "./StatusBar";
+import GameArea from "./GameArea";
 import StartDialog from "./StartDialog";
 
 const sampleChars = {
@@ -44,6 +45,7 @@ function FinderGame() {
   }
 
   function finish() {
+    console.log("Game finished");
     stopTimer();
     setMode("finish");
   }
@@ -59,7 +61,7 @@ function FinderGame() {
 
     const newList = {...characters};
     newList[name].found = true;
-    const allCharsFound = (newList.find((char) => !char.found) !== undefined);
+    const allCharsFound = (Object.values(newList).find((char) => !char.found) === undefined);
 
     setCharacters(newList);
     if (allCharsFound) {
@@ -70,6 +72,7 @@ function FinderGame() {
   return (
     <div>
       <StatusBar characters={characters} time={time}/>
+      <GameArea characters={characters} handleCharFound={foundCharacter}/>
       <StartDialog show={mode === "reset"} characters={characters} handleStart={start}/>
     </div>
   );
