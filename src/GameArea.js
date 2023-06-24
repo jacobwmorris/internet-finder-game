@@ -1,5 +1,6 @@
 import {useState, useRef} from "react";
-import MarkerIcon from "./icons/marker.svg";
+import MarkerIcon from "./images/marker.svg";
+import "./styles/GameArea.css";
 
 function GameArea({characters, handleCharFound}) {
   const [markerPos, setMarkerPos] = useState(null);
@@ -7,12 +8,12 @@ function GameArea({characters, handleCharFound}) {
 
   const unguessedChars = Object.keys(characters).filter((name) => !characters[name].found);
 
-  function mark(imgX, imgY) {
+  function mark(pos) {
     if (markerPos !== null) {
       setMarkerPos(null);
       return;
     }
-    setMarkerPos({x: imgX, y: imgY});
+    setMarkerPos(pos);
   }
 
   function guess(imgPos, name) {
@@ -24,9 +25,10 @@ function GameArea({characters, handleCharFound}) {
   }
 
   return (
-    <div>
-      <img src="./images/main.jpg" alt="Main image" ref={image} onClick={(e) => mark(e.offsetX, e.offsetY)}/>
-      <GuessMarker pos={markerPos} unguessedChars={unguessedChars} handleGuess={guess}/>
+    <div className="GameArea">
+      <div className="GameArea-image" ref={image} onClick={(e) => mark(clickToPosition(e))}>
+        <GuessMarker pos={markerPos} unguessedChars={unguessedChars} handleGuess={guess}/>
+      </div>
     </div>
   );
 }
@@ -37,15 +39,15 @@ function GuessMarker({pos, unguessedChars, handleGuess}) {
   const unguessedCharsRendered = unguessedChars.map((name) => {
     return (
       <li key={name}>
-        <button onClick={(e) => handleGuess(pos, name)}>{name}</button>
+        <button onClick={(e) => {e.stopPropagation(); handleGuess(pos, name)}}>{name}</button>
       </li>
     );
   });
 
   return (
-    <div>
-      <img src={MarkerIcon} alt="Mark"/>
-      <div>
+    <div className="GameArea-markspot" style={{left: numToCss(pos.x), top: numToCss(pos.y)}}>
+      <img className="GameArea-mark" src={MarkerIcon} alt="Mark"/>
+      <div className="GameArea-guesslist">
         <h2>Who is this?</h2>
         <ul>
           {unguessedCharsRendered}
@@ -53,6 +55,19 @@ function GuessMarker({pos, unguessedChars, handleGuess}) {
       </div>
     </div>
   );
+}
+
+function numToCss(num) {
+  return num.toString() + "px";
+}
+
+function clickToPosition(clickEvent) {
+  const elementX = clickEvent.target.offsetLeft;
+  const elementY = clickEvent.target.offsetTop;
+  return {
+    x: clickEvent.pageX - elementX,
+    y: clickEvent.pageY - elementY
+  };
 }
 
 export default GameArea;

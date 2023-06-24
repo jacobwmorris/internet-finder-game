@@ -1,5 +1,5 @@
 import "./styles/StatusBar.css";
-import checkMark from "./icons/check.svg";
+import checkMark from "./images/check.svg";
 
 function StatusBar({characters, time}) {
   const charactersRendered = Object.entries(characters).map(([name, val]) => {

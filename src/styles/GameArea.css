@@ -1,0 +1,27 @@
+
+.GameArea-image {
+    width: 1507px;
+    height: 1058px;
+    background-image: url("../images/main.jpg");
+    background-size: cover;
+    position: relative;
+}
+
+.GameArea-markspot {
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.GameArea-mark {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+}
+
+.GameArea-guesslist {
+    position: absolute;
+}
