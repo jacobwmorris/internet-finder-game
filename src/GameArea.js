@@ -6,8 +6,6 @@ function GameArea({characters, handleCharFound}) {
   const [markerPos, setMarkerPos] = useState(null);
   const image = useRef(null);
 
-  const unguessedChars = Object.keys(characters).filter((name) => !characters[name].found);
-
   function mark(pos) {
     if (markerPos !== null) {
       setMarkerPos(null);
@@ -27,22 +25,24 @@ function GameArea({characters, handleCharFound}) {
   return (
     <div className="GameArea">
       <div className="GameArea-image" ref={image} onClick={(e) => mark(clickToPosition(e))}>
-        <GuessMarker pos={markerPos} unguessedChars={unguessedChars} handleGuess={guess}/>
+        <GuessMarker pos={markerPos} characters={characters} handleGuess={guess}/>
       </div>
     </div>
   );
 }
 
-function GuessMarker({pos, unguessedChars, handleGuess}) {
+function GuessMarker({pos, characters, handleGuess}) {
   if (pos === null) {return null}
 
-  const unguessedCharsRendered = unguessedChars.map((name) => {
-    return (
-      <li key={name}>
-        <button onClick={(e) => {e.stopPropagation(); handleGuess(pos, name)}}>{name}</button>
-      </li>
-    );
-  });
+  const unguessedCharsRendered = Object.keys(characters)
+    .filter((name) => !characters[name].found)
+    .map((name) => {
+      return (
+        <li key={name}>
+          <button onClick={(e) => {e.stopPropagation(); handleGuess(pos, name)}}>{name}</button>
+        </li>
+      );
+    });
 
   return (
     <div className="GameArea-markspot" style={{left: numToCss(pos.x), top: numToCss(pos.y)}}>
