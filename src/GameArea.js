@@ -1,12 +1,17 @@
 import {useState, useRef, useEffect} from "react";
-import {v4 as uuidv4} from "uuid";
+import GuessManager from "./GuessManager";
 import MarkerIcon from "./images/marker.svg";
 import "./styles/GameArea.css";
 
 function GameArea({characters, handleCharFound}) {
   const [markerPos, setMarkerPos] = useState(null);
-  const [guesses, setGuesses] = useState({});
+  const [guesses, setGuesses] = useState([]);
   const image = useRef(null);
+  const guessManager = useRef(new GuessManager((list) => setGuesses(list.slice()), handleCharFound));
+
+  useEffect(() => {
+    guessManager.current.setCallbacks((list) => setGuesses(list.slice()), handleCharFound);
+  }, [setGuesses, handleCharFound]);
 
   function mark(pos) {
     if (markerPos !== null) {
@@ -17,35 +22,18 @@ function GameArea({characters, handleCharFound}) {
   }
 
   function guess(imgPos, name) {
-    if (true) {
-        handleCharFound(name);
-    }
+    guessManager.current.add(name, imgPos, 2000);
     setMarkerPos(null);
   }
 
-  function guess2(imgPos, name) {
-    const newList = {...guesses};
-    const newId = uuidv4();
-    console.log("adding " + newId);
-    newList[newId] = {pos: imgPos, name: name};
-    setGuesses(newList);
-    setMarkerPos(null);
-  }
-
-  function removeGuess(id) {
-    const guessEntries = Object.entries(guesses);
-    const newList = Object.fromEntries(guessEntries.filter((g) => {console.log("removing " + g[0]); return g[0] !== id}));
-    setGuesses(newList);
-  }
-
-  const guessesRendered = Object.entries(guesses).map(([id, val]) => {
+  const guessesRendered = guesses.map((g) => {
     return (
       <GuessResult
-        key={id}
-        pos={val.pos}
-        name={val.name}
-        handleCharFound={handleCharFound}
-        handleRemoveSelf={() => removeGuess(id)}
+        key={g.renderId}
+        pos={g.pos}
+        name={g.name}
+        isChecked={g.isChecked}
+        isCorrect={g.isCorrect}
       />
     )
   });
@@ -53,7 +41,7 @@ function GameArea({characters, handleCharFound}) {
   return (
     <div className="GameArea">
       <div className="GameArea-image" ref={image} onClick={(e) => mark(clickToPosition(e))}>
-        <GuessMarker pos={markerPos} characters={characters} handleGuess={guess2}/>
+        <GuessMarker pos={markerPos} characters={characters} handleGuess={guess}/>
         {guessesRendered}
       </div>
     </div>
@@ -86,33 +74,7 @@ function GuessMarker({pos, characters, handleGuess}) {
   );
 }
 
-function GuessResult({pos, name, handleCharFound, handleRemoveSelf}) {
-  const [isChecked, setIsChecked] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
-
-  useEffect(() => {
-    //TODO: check the guess against the database
-    console.log("Running effect for " + pos.x);
-    let ignore = false;
-    new Promise((resolve, reject) => {setTimeout(() => resolve(false), 2000)})
-      .then((result) => {
-        if (ignore) {console.log("ignoring promise resolution"); return;}
-        setIsChecked(true);
-
-        if (result) {
-          handleCharFound(name);
-          setIsCorrect(true);
-        }
-        else {
-          setIsCorrect(false);
-        }
-
-        setTimeout(() => handleRemoveSelf(), 3000);
-      });
-    
-    return (() => {console.log("Tearing down " + pos.x); ignore = true;});
-  }, [name, handleCharFound, handleRemoveSelf]);
-
+function GuessResult({pos, name, isChecked, isCorrect}) {
   if (!isChecked) {
     return (
       <div className="GameArea-guessspot" style={{left: numToCss(pos.x), top: numToCss(pos.y)}}>
