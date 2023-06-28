@@ -25,3 +25,12 @@
 .GameArea-guesslist {
     position: absolute;
 }
+
+.GameArea-guessspot {
+    position: absolute;
+}
+
+.GameArea-guesspending {
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
