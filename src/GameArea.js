@@ -1,4 +1,5 @@
 import {useState, useRef, useEffect} from "react";
+import {numToCss, clickToPosition} from "./PositionFuncs";
 import GuessManager from "./GuessManager";
 import MarkerIcon from "./images/marker.svg";
 import "./styles/GameArea.css";
@@ -90,19 +91,6 @@ function GuessResult({pos, name, isChecked, isCorrect}) {
         <div className="GameArea-badguess">{incorrectMessage(name)}</div>}
     </div>
   )
-}
-
-function numToCss(num) {
-  return num.toString() + "px";
-}
-
-function clickToPosition(clickEvent) {
-  const elementX = clickEvent.target.offsetLeft;
-  const elementY = clickEvent.target.offsetTop;
-  return {
-    x: clickEvent.pageX - elementX,
-    y: clickEvent.pageY - elementY
-  };
 }
 
 function incorrectMessage(name)  {
