@@ -1,4 +1,9 @@
-import {initializeApp} from "firebase";
+import {initializeApp} from "firebase/app";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC7CPslGCTRyAqEWO3VgjMuytBS-hy4oJQ",
@@ -10,9 +15,21 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-function newCharacter(name, position, radius, portrait) {
+async function newCharacter(name, position, radius, portrait) {
+  //If portrait is given, put it in cloud storage
+  const charFields = {name: name, x: position.x, y: position.y, radius: radius};
 
+  try {
+    const newChar = await setDoc(doc(db, "characters", name), charFields);
+  }
+  catch (err) {
+    console.error(err);
+    return false;
+  }
+
+  return true;
 }
 
 export {newCharacter};
