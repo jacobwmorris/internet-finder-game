@@ -1,8 +1,14 @@
 import {useState, useRef} from "react";
+import {startEmulator} from "./Database";
 import StatusBar from "./StatusBar";
 import GameArea from "./GameArea";
+import GameAreaDebug from "./GameAreaDebug";
 import StartDialog from "./StartDialog";
 
+const debugMode = true;
+if (debugMode) {
+  startEmulator();
+}
 const sampleChars = {
   "Dramatic Chipmunk": {x: 0, y: 0, found: true},
   "Chuck Testa": {x: 1, y: 0, found: true},
@@ -72,7 +78,9 @@ function FinderGame() {
   return (
     <div>
       <StatusBar characters={characters} time={time}/>
-      <GameArea characters={characters} handleCharFound={foundCharacter}/>
+      {debugMode ?
+        <GameAreaDebug characters={characters} handleCharFound={foundCharacter}/> :
+        <GameArea characters={characters} handleCharFound={foundCharacter}/>}
       <StartDialog show={mode === "reset"} characters={characters} handleStart={start}/>
     </div>
   );

@@ -3,7 +3,15 @@ import {
   getFirestore,
   doc,
   setDoc,
+  connectFirestoreEmulator
 } from "firebase/firestore";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  connectStorageEmulator
+} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC7CPslGCTRyAqEWO3VgjMuytBS-hy4oJQ",
@@ -16,13 +24,26 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 async function newCharacter(name, position, radius, portrait) {
-  //If portrait is given, put it in cloud storage
   const charFields = {name: name, x: position.x, y: position.y, radius: radius};
 
+  if (portrait) {
+    try {
+      console.log("portraits/" + name);
+      const imageRef = ref(storage, "portraits/" + name);
+      await uploadBytesResumable(imageRef, portrait, {contentType: portrait.type});
+      const displayUrl = await getDownloadURL(imageRef);
+      charFields.portrait = displayUrl;
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }
+
   try {
-    const newChar = await setDoc(doc(db, "characters", name), charFields);
+    await setDoc(doc(db, "characters", name), charFields);
   }
   catch (err) {
     console.error(err);
@@ -32,4 +53,9 @@ async function newCharacter(name, position, radius, portrait) {
   return true;
 }
 
-export {newCharacter};
+function startEmulator() {
+  connectFirestoreEmulator(db, "127.0.0.1", 8080);
+  connectStorageEmulator(storage, "127.0.0.1", 9199);
+}
+
+export {newCharacter, startEmulator};

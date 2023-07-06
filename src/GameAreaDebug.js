@@ -1,5 +1,6 @@
 import {useState, useRef, useEffect} from "react";
-import {numToCss, clickToPosition} from "./PositionFuncs";
+import {numToCss, clickToPosition, positionToPercent, distance} from "./PositionFuncs";
+import {newCharacter} from "./Database";
 import MarkerIcon from "./images/marker.svg";
 import "./styles/GameArea.css";
 
@@ -19,19 +20,29 @@ function GameAreaDebug({characters, handleCharFound}) {
     }
   }
 
+  function handleAddCharacter(e) {
+    e.preventDefault();
+    if (positionMark === null || radiusMark === null || image.current === null) {return;}
+    const name = e.target.elements.name.value;
+    const portrait = e.target.elements.portrait.files[0];
+    const charPos = positionToPercent(positionMark, image.current.offsetWidth, image.current.offsetHeight);
+    const radiusPos = positionToPercent(radiusMark, image.current.offsetWidth, image.current.offsetHeight);
+    newCharacter(name, charPos, distance(charPos, radiusPos), portrait);
+  }
+
   return (
     <div className="GameArea">
       <div className="GameArea-debugcontrols">
         <div>
           <fieldset>
-            <legent>Mark</legent>
-            <label>Position: <input type="radio" name="marktype" onClick={() => setMarkType("pos")}/></label>
+            <legend>Mark</legend>
+            <label>Position: <input type="radio" name="marktype" defaultChecked onClick={() => setMarkType("pos")}/></label>
             <label>Radius: <input type="radio" name="marktype" onClick={() => setMarkType("rad")}/></label>
             <label>Guess: <input type="radio" name="marktype" onClick={() => setMarkType("guess")}/></label>
           </fieldset>
         </div>
         <div>
-          <form>
+          <form onSubmit={handleAddCharacter}>
             <button>Add character</button>
             <label>Name: <input type="text" name="name"/></label>
             <label>Portrait: <input type="file" name="portrait"/></label>
@@ -67,7 +78,7 @@ function Marker({pos, type}) {
   return (
     <div className="GameArea-markspot" style={{left: numToCss(pos.x), top: numToCss(pos.y)}}>
       <img className="GameArea-mark" src={MarkerIcon} alt="Mark"/>
-      <div>{type}</div>
+      <div className="GameArea-marktype">{type}</div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 
 function numToCss(num) {
-  return num.toString() + "px";
+  return Math.floor(num).toString() + "px";
 }
   
 function clickToPosition(clickEvent) {
@@ -12,4 +12,17 @@ function clickToPosition(clickEvent) {
   };
 }
 
-export {numToCss, clickToPosition};
+function positionToPercent(pos, width, height) {
+  return {
+    x: pos.x / width,
+    y: pos.y / height
+  };
+}
+
+function distance(pos1, pos2) {
+  const a = pos1.x - pos2.x;
+  const b = pos1.y - pos2.y;
+  return Math.sqrt(a * a + b * b);
+}
+
+export {numToCss, clickToPosition, positionToPercent, distance};
