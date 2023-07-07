@@ -2,7 +2,9 @@ import {initializeApp} from "firebase/app";
 import {
   getFirestore,
   doc,
+  collection,
   setDoc,
+  onSnapshot,
   connectFirestoreEmulator
 } from "firebase/firestore";
 import {
@@ -27,11 +29,10 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 async function newCharacter(name, position, radius, portrait) {
-  const charFields = {name: name, x: position.x, y: position.y, radius: radius};
+  const charFields = {name: name, x: position.x, y: position.y, rx: radius.x, ry: radius.y};
 
   if (portrait) {
     try {
-      console.log("portraits/" + name);
       const imageRef = ref(storage, "portraits/" + name);
       await uploadBytesResumable(imageRef, portrait, {contentType: portrait.type});
       const displayUrl = await getDownloadURL(imageRef);
@@ -53,9 +54,30 @@ async function newCharacter(name, position, radius, portrait) {
   return true;
 }
 
+function setupCharacterListener(handleNewData) {
+  const characters = collection(db, "characters");
+  const stopListener = onSnapshot(characters, (snap) => {
+    const displayInfo = snap.docs.map((d) => {
+      const data = d.data();
+      return {
+        name: data.name,
+        pos: {x: data.x, y: data.y},
+        radius: {x: data.rx, y: data.ry}
+      };
+    });
+
+    handleNewData(displayInfo);
+  },
+  (err) => {
+    console.error(err);
+  });
+
+  return stopListener;
+}
+
 function startEmulator() {
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
   connectStorageEmulator(storage, "127.0.0.1", 9199);
 }
 
-export {newCharacter, startEmulator};
+export {newCharacter, startEmulator, setupCharacterListener};

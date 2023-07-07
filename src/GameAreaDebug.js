@@ -1,6 +1,6 @@
 import {useState, useRef, useEffect} from "react";
-import {numToCss, clickToPosition, positionToPercent, distance} from "./PositionFuncs";
-import {newCharacter} from "./Database";
+import {numToCss, clickToPosition, positionToPercent, percentToPosition, subtract} from "./PositionFuncs";
+import {newCharacter, setupCharacterListener} from "./Database";
 import MarkerIcon from "./images/marker.svg";
 import "./styles/GameArea.css";
 
@@ -9,7 +9,13 @@ function GameAreaDebug({characters, handleCharFound}) {
   const [radiusMark, setRadiusMark] = useState(null);
   const [guessMark, setGuessMark] = useState(null);
   const [markType, setMarkType] = useState("pos");
+  const [charAreas, setCharAreas] = useState([]);
   const image = useRef(null);
+
+  useEffect(() => {
+    const stopListener = setupCharacterListener(setCharAreas);
+    return () => {stopListener();}
+  }, [setCharAreas]);
 
   function mark(pos) {
     switch (markType) {
@@ -26,9 +32,20 @@ function GameAreaDebug({characters, handleCharFound}) {
     const name = e.target.elements.name.value;
     const portrait = e.target.elements.portrait.files[0];
     const charPos = positionToPercent(positionMark, image.current.offsetWidth, image.current.offsetHeight);
-    const radiusPos = positionToPercent(radiusMark, image.current.offsetWidth, image.current.offsetHeight);
-    newCharacter(name, charPos, distance(charPos, radiusPos), portrait);
+    const radius = positionToPercent(subtract(radiusMark, positionMark), image.current.offsetWidth, image.current.offsetHeight);
+    newCharacter(name, charPos, radius, portrait);
   }
+
+  const charAreasRendered = charAreas.map((a) => {
+    return (
+      <ClickArea
+        key={a.name}
+        name={a.name}
+        pos={percentToPosition(a.pos, image.current.offsetWidth, image.current.offsetHeight)}
+        radius={percentToPosition(a.radius, image.current.offsetWidth, image.current.offsetHeight)}
+      />
+    );
+  });
 
   return (
     <div className="GameArea">
@@ -67,6 +84,7 @@ function GameAreaDebug({characters, handleCharFound}) {
         <Marker pos={positionMark} type="pos"/>
         <Marker pos={radiusMark} type="rad"/>
         <Marker pos={guessMark} type="guess"/>
+        {charAreasRendered}
       </div>
     </div>
   );
@@ -81,6 +99,19 @@ function Marker({pos, type}) {
       <div className="GameArea-marktype">{type}</div>
     </div>
   );
+}
+
+function ClickArea({name, pos, radius}) {
+  const diameter = numToCss(Math.sqrt(radius.x * radius.x + radius.y * radius.y) * 2);
+
+  return (
+    <div 
+      className="GameArea-clickarea"
+      style={{left: numToCss(pos.x), top: numToCss(pos.y), width: diameter, height: diameter}}
+    >
+      <div>{name}</div>
+    </div>
+  )
 }
 
 export default GameAreaDebug;

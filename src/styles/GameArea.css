@@ -59,3 +59,20 @@
     background-color: black;
     pointer-events: inherit;
 }
+
+.GameArea-clickarea {
+    position: absolute;
+    pointer-events: none;
+    background-color: #0000ff80;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.GameArea-clickarea > div {
+    position: inherit;
+    pointer-events: inherit;
+    top: calc(100% + 5px);
+    left: 50%;
+    color: white;
+    background-color: black;
+}

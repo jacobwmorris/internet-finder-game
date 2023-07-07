@@ -24,3 +24,6 @@ yarn-error.log*
 
 /notes/*
 /portraits/*
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
