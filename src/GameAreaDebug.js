@@ -1,6 +1,6 @@
 import {useState, useRef, useEffect} from "react";
 import {numToCss, clickToPosition, positionToPercent, percentToPosition, subtract} from "./PositionFuncs";
-import {newCharacter, setupCharacterListener, getRandomThree, checkGuess} from "./Database";
+import {newCharacter, setupCharacterListener, getRandomThree, checkGuess, getScoreboard} from "./Database";
 import MarkerIcon from "./images/marker.svg";
 import "./styles/GameArea.css";
 
@@ -13,7 +13,6 @@ function GameAreaDebug({characters, handleCharFound}) {
   const image = useRef(null);
 
   useEffect(() => {
-    console.log("running effect");
     const stopListener = setupCharacterListener(setCharAreas);
     return () => {stopListener();}
   }, [setCharAreas]);
@@ -47,6 +46,10 @@ function GameAreaDebug({characters, handleCharFound}) {
     const name = e.target.elements.name.value;
     checkGuess(name, positionToPercent(guessMark, image.current.offsetWidth, image.current.offsetHeight))
       .then((result) => console.log(result), (error) => console.error(error));
+  }
+
+  function handleTestScoreboard(e) {
+    getScoreboard(3).then((scores) => console.log(scores), (error) => console.error(error));
   }
 
   const charAreasRendered = charAreas.map((a) => {
@@ -85,7 +88,7 @@ function GameAreaDebug({characters, handleCharFound}) {
             <label>Name: <input type="text" name="name"/></label>
           </form>
         </div>
-        <div><button>Get scoreboard</button></div>
+        <div><button onClick={handleTestScoreboard}>Get scoreboard</button></div>
         <div>
           <form>
             <button>Post high score</button>

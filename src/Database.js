@@ -1,11 +1,9 @@
 import {initializeApp} from "firebase/app";
 import {
   getFirestore,
-  doc,
-  collection,
-  setDoc,
-  getDoc,
-  getDocs,
+  doc, collection,
+  query, orderBy, limit,
+  setDoc, getDoc, getDocs,
   onSnapshot,
   connectFirestoreEmulator
 } from "firebase/firestore";
@@ -132,6 +130,21 @@ function isWithinCircle(pos, center, radSquared) {
   const distY = pos.y - center.y;
   const distSquared = distX * distX + distY * distY;
   return distSquared <= radSquared;
+}
+
+export async function getScoreboard(count) {
+  try {
+    const scoreQuery = query(collection(db, "highscores"), orderBy("time"), limit(count));
+    const snapshot = await getDocs(scoreQuery);
+    return snapshot.docs.map((d) => {
+      const data = d.data();
+      return {player: data.player, time: data.time};
+    });
+  }
+  catch (err) {
+    console.error(err);
+    return [];
+  }
 }
 
 export function startEmulator() {
