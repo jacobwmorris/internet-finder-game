@@ -1,6 +1,6 @@
 import {useState, useRef, useEffect} from "react";
 import {numToCss, clickToPosition, positionToPercent, percentToPosition, subtract} from "./PositionFuncs";
-import {newCharacter, setupCharacterListener, getRandomThree, checkGuess, getScoreboard} from "./Database";
+import {newCharacter, setupCharacterListener, getRandomThree, checkGuess, getScoreboard, postScore} from "./Database";
 import MarkerIcon from "./images/marker.svg";
 import "./styles/GameArea.css";
 
@@ -52,6 +52,12 @@ function GameAreaDebug({characters, handleCharFound}) {
     getScoreboard(3).then((scores) => console.log(scores), (error) => console.error(error));
   }
 
+  function handlePostScore(e) {
+    e.preventDefault();
+    const time = parseInt(e.target.elements.time.value);
+    postScore("testplayer", time);
+  }
+
   const charAreasRendered = charAreas.map((a) => {
     return (
       <ClickArea
@@ -90,7 +96,7 @@ function GameAreaDebug({characters, handleCharFound}) {
         </div>
         <div><button onClick={handleTestScoreboard}>Get scoreboard</button></div>
         <div>
-          <form>
+          <form onSubmit={handlePostScore}>
             <button>Post high score</button>
             <label>Time: <input type="number" name="time"/></label>
           </form>

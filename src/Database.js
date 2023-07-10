@@ -3,7 +3,7 @@ import {
   getFirestore,
   doc, collection,
   query, orderBy, limit,
-  setDoc, getDoc, getDocs,
+  setDoc, addDoc, getDoc, getDocs,
   onSnapshot,
   connectFirestoreEmulator
 } from "firebase/firestore";
@@ -144,6 +144,16 @@ export async function getScoreboard(count) {
   catch (err) {
     console.error(err);
     return [];
+  }
+}
+
+export async function postScore(player, time) {
+  try {
+    const scoreboard = collection(db, "highscores");
+    await addDoc(scoreboard, {player, time});
+  }
+  catch (err) {
+    console.error(err);
   }
 }
 
