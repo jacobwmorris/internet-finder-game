@@ -14,6 +14,10 @@
     pointer-events: none;
 }
 
+.GameArea-markspot button {
+    pointer-events: auto;
+}
+
 .GameArea-mark {
     width: 30px;
     height: 30px;
@@ -21,7 +25,6 @@
     left: 0;
     top: 0;
     transform: translate(-50%, -50%);
-    pointer-events: inherit;
 }
 
 .GameArea-guesslist {
@@ -31,10 +34,6 @@
 .GameArea-guessspot {
     position: absolute;
     pointer-events: none;
-}
-
-.GameArea-guessspot * {
-    pointer-events: inherit;
 }
 
 .GameArea-guesspending {
@@ -57,7 +56,6 @@
     transform: translateX(-50%);
     color: white;
     background-color: black;
-    pointer-events: inherit;
 }
 
 .GameArea-clickarea {
@@ -70,7 +68,6 @@
 
 .GameArea-clickarea > div {
     position: inherit;
-    pointer-events: inherit;
     top: calc(100% + 5px);
     left: 50%;
     color: white;

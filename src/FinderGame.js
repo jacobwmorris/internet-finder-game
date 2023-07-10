@@ -5,15 +5,15 @@ import GameArea from "./GameArea";
 import GameAreaDebug from "./GameAreaDebug";
 import StartDialog from "./StartDialog";
 
-const debugMode = true;
+const debugMode = false;
 if (debugMode) {
   startEmulator();
 }
-const sampleChars = {
-  "Dramatic Chipmunk": {x: 0, y: 0, found: true},
-  "Chuck Testa": {x: 1, y: 0, found: true},
-  "Mudkip": {x: 0, y: 1, found: false}
-}
+const sampleChars = [
+  {name: "Dramatic Chipmunk", found: false},
+  {name: "Chuck Testa", found: false},
+  {name: "Mudkip", found: false}
+]
 
 function FinderGame() {
   const [mode, setMode] = useState("reset");
@@ -61,14 +61,16 @@ function FinderGame() {
   }
 
   function foundCharacter(name) {
-    if (characters[name] === undefined) {
-      return;
-    }
-
-    const newList = {...characters};
-    newList[name].found = true;
-    const allCharsFound = (Object.values(newList).find((char) => !char.found) === undefined);
-
+    const newList = characters.map((c) => {
+      if (name === c.name) {
+        c.found = true;
+        return c;
+      }
+      return c;
+    });
+    console.log(characters, newList);
+    const allCharsFound = (newList.find((c) => !c.found) === undefined);
+    
     setCharacters(newList);
     if (allCharsFound) {
       finish();

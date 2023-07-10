@@ -2,11 +2,11 @@ import "./styles/StatusBar.css";
 import checkMark from "./images/check.svg";
 
 function StatusBar({characters, time}) {
-  const charactersRendered = Object.entries(characters).map(([name, val]) => {
+  const charactersRendered = characters.map((c) => {
     return (
-      <li key={name} className={"StatusBar-checklist-item" + (val.found ? " StatusBar-found" : "")}>
-        {val.found ? <img className="StatusBar-checkmark" src={checkMark}/> : null}
-        {name}
+      <li key={c.name} className={"StatusBar-checklist-item" + (c.found ? " StatusBar-found" : "")}>
+        {c.found ? <img className="StatusBar-checkmark" src={checkMark}/> : null}
+        {c.name}
       </li>
     )
   });

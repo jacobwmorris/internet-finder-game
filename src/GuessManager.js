@@ -43,7 +43,7 @@ class Guess {
         this.pos = pos;
 
         //TODO: check guess with the database
-        new Promise((resolve, reject) => {setTimeout(() => resolve(false), 3000)})
+        new Promise((resolve, reject) => {setTimeout(() => resolve(true), 3000)})
         .then((correct) => {
             this.isChecked = true;
             this.isCorrect = correct;

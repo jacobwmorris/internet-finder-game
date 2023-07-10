@@ -4,8 +4,8 @@ function StartDialog({show, characters, handleStart}) {
     return null;
   }
 
-  const charactersRendered = Object.keys(characters).map((name) => {
-    return <Portrait key={name} name={name}/>;
+  const charactersRendered = characters.map((c) => {
+    return <Portrait key={c.name} name={c.name}/>;
   });
 
   return (

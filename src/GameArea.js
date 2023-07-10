@@ -52,12 +52,12 @@ function GameArea({characters, handleCharFound}) {
 function GuessMarker({pos, characters, handleGuess}) {
   if (pos === null) {return null}
 
-  const unguessedCharsRendered = Object.keys(characters)
-    .filter((name) => !characters[name].found)
-    .map((name) => {
+  const unguessedCharsRendered = characters
+    .filter((c) => !c.found)
+    .map((c) => {
       return (
-        <li key={name}>
-          <button onClick={(e) => {e.stopPropagation(); handleGuess(pos, name)}}>{name}</button>
+        <li key={c.name}>
+          <button onClick={(e) => {e.stopPropagation(); handleGuess(pos, c.name)}}>{c.name}</button>
         </li>
       );
     });
