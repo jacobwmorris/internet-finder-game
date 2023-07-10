@@ -1,6 +1,6 @@
 import {useState, useRef, useEffect} from "react";
 import {numToCss, clickToPosition, positionToPercent, percentToPosition, subtract} from "./PositionFuncs";
-import {newCharacter, setupCharacterListener} from "./Database";
+import {newCharacter, setupCharacterListener, getRandomThree, checkGuess} from "./Database";
 import MarkerIcon from "./images/marker.svg";
 import "./styles/GameArea.css";
 
@@ -13,6 +13,7 @@ function GameAreaDebug({characters, handleCharFound}) {
   const image = useRef(null);
 
   useEffect(() => {
+    console.log("running effect");
     const stopListener = setupCharacterListener(setCharAreas);
     return () => {stopListener();}
   }, [setCharAreas]);
@@ -34,6 +35,18 @@ function GameAreaDebug({characters, handleCharFound}) {
     const charPos = positionToPercent(positionMark, image.current.offsetWidth, image.current.offsetHeight);
     const radius = positionToPercent(subtract(radiusMark, positionMark), image.current.offsetWidth, image.current.offsetHeight);
     newCharacter(name, charPos, radius, portrait);
+  }
+
+  function handleTestRandom(e) {
+    getRandomThree().then((characters) => console.log(characters), (error) => console.error(error));
+  }
+
+  function handleTestGuess(e) {
+    e.preventDefault();
+    if (guessMark === null) {return;}
+    const name = e.target.elements.name.value;
+    checkGuess(name, positionToPercent(guessMark, image.current.offsetWidth, image.current.offsetHeight))
+      .then((result) => console.log(result), (error) => console.error(error));
   }
 
   const charAreasRendered = charAreas.map((a) => {
@@ -65,9 +78,9 @@ function GameAreaDebug({characters, handleCharFound}) {
             <label>Portrait: <input type="file" name="portrait"/></label>
           </form>
         </div>
-        <div><button>Test randomizer</button></div>
+        <div><button onClick={handleTestRandom}>Test randomizer</button></div>
         <div>
-          <form>
+          <form onSubmit={handleTestGuess}>
             <button>Test guess</button>
             <label>Name: <input type="text" name="name"/></label>
           </form>

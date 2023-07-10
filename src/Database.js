@@ -4,6 +4,8 @@ import {
   doc,
   collection,
   setDoc,
+  getDoc,
+  getDocs,
   onSnapshot,
   connectFirestoreEmulator
 } from "firebase/firestore";
@@ -28,7 +30,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-async function newCharacter(name, position, radius, portrait) {
+export async function newCharacter(name, position, radius, portrait) {
   const charFields = {name: name, x: position.x, y: position.y, rx: radius.x, ry: radius.y};
 
   if (portrait) {
@@ -54,7 +56,7 @@ async function newCharacter(name, position, radius, portrait) {
   return true;
 }
 
-function setupCharacterListener(handleNewData) {
+export function setupCharacterListener(handleNewData) {
   const characters = collection(db, "characters");
   const stopListener = onSnapshot(characters, (snap) => {
     const displayInfo = snap.docs.map((d) => {
@@ -75,9 +77,64 @@ function setupCharacterListener(handleNewData) {
   return stopListener;
 }
 
-function startEmulator() {
+export async function getRandomThree() {
+  try {
+    const characters = collection(db, "characters");
+    const snapshot = await getDocs(characters);
+    const charArray = snapshot.docs.map((d) => {
+      const data = d.data();
+      const char = {name: data.name};
+      if (data.portrait) {char.portrait = data.portrait};
+      return char;
+    });
+
+    return randomFromArray(charArray);
+  }
+  catch (err) {
+    console.error(err);
+    return [];
+  }
+}
+
+function randomFromArray(arr) {
+  const rand3 = [];
+
+  for (let i = 0; i < 3; i++) {
+    if (arr.length === 0) {
+      break;
+    }
+    const index = Math.floor(Math.random() * arr.length);
+    rand3.push(arr[index]);
+    arr.splice(index, 1);
+  }
+
+  return rand3;
+}
+
+export async function checkGuess(name, position) {
+  try {
+    const character = doc(db, "characters", name);
+    const snapshot = await getDoc(character);
+    if (!snapshot.exists()) {return false;}
+    const data = snapshot.data();
+    const center = {x: data.x, y: data.y};
+    const radiusSquared = data.rx * data.rx + data.ry * data.ry;
+    return isWithinCircle(position, center, radiusSquared)
+  }
+  catch (err) {
+    console.error(err);
+    return false;
+  }
+}
+
+function isWithinCircle(pos, center, radSquared) {
+  const distX = pos.x - center.x;
+  const distY = pos.y - center.y;
+  const distSquared = distX * distX + distY * distY;
+  return distSquared <= radSquared;
+}
+
+export function startEmulator() {
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
   connectStorageEmulator(storage, "127.0.0.1", 9199);
 }
-
-export {newCharacter, startEmulator, setupCharacterListener};
