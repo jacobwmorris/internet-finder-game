@@ -1,4 +1,5 @@
 import "./styles/StatusBar.css";
+import {timeToString} from "./Helpers";
 import checkMark from "./images/check.svg";
 
 function StatusBar({characters, time}) {
@@ -24,13 +25,6 @@ function StatusBar({characters, time}) {
       </div>
     </div>
   );
-}
-
-function timeToString(time) {
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
-  const secondsStr = seconds < 10 ? "0" + seconds.toString() : seconds.toString();
-  return minutes.toString() + ":" + secondsStr;
 }
 
 export default StatusBar;
