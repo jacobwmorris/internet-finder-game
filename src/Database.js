@@ -138,7 +138,7 @@ export async function getScoreboard(count) {
     const snapshot = await getDocs(scoreQuery);
     return snapshot.docs.map((d) => {
       const data = d.data();
-      return {player: data.player, time: data.time};
+      return {id: d.id, player: data.player, time: data.time};
     });
   }
   catch (err) {
