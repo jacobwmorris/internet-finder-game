@@ -4,9 +4,11 @@ import StatusBar from "./StatusBar";
 import GameArea from "./GameArea";
 import GameAreaDebug from "./GameAreaDebug";
 import StartDialog from "./StartDialog";
+import Scoreboard from "./Scoreboard";
 
 const debugMode = false;
-if (debugMode) {
+const useFirebaseEmu = true;
+if (debugMode || useFirebaseEmu) {
   startEmulator();
 }
 const sampleChars = [
@@ -68,7 +70,6 @@ function FinderGame() {
       }
       return c;
     });
-    console.log(characters, newList);
     const allCharsFound = (newList.find((c) => !c.found) === undefined);
     
     setCharacters(newList);
@@ -84,6 +85,7 @@ function FinderGame() {
         <GameAreaDebug characters={characters} handleCharFound={foundCharacter}/> :
         <GameArea characters={characters} handleCharFound={foundCharacter}/>}
       <StartDialog show={mode === "reset"} characters={characters} handleStart={start}/>
+      <Scoreboard show={mode === "finish"} time={time}/>
     </div>
   );
 }
