@@ -1,15 +1,18 @@
 import {useState, useEffect} from "react";
-import {getScoreboard} from "./Database";
+import {getScoreboard, postScore} from "./Database";
 import {timeToString} from "./Helpers";
 
-function Scoreboard({show, time}) {
+const scoreboardLength = 10;
+
+function Scoreboard({show, time, handleReset}) {
   const [scores, setScores] = useState("loading");
+  const [yourScore, setYourScore] = useState(null);
 
   useEffect(() => {
     if (!show) {return;}
     let ignore = false;
 
-    getScoreboard(10).then((scoreboard) => {
+    getScoreboard(scoreboardLength).then((scoreboard) => {
       if (ignore) {return;}
       setScores(scoreboard)
     },
@@ -26,30 +29,78 @@ function Scoreboard({show, time}) {
     return null;
   }
 
+  const {place, isHighscore} = getPlace(time, scores, scoreboardLength);
+
+  function handleNewScore(e) {
+    e.preventDefault();
+    const playerName = e.target.elements.playername.value;
+    postScore(playerName, time)
+    .then(() => getScoreboard(10))
+    .then((scoreboard) => {
+      setScores(scoreboard);
+      setYourScore(place);
+    })
+    .catch((error) => {
+      setScores("failed");
+      console.error(error);
+    });
+  }
+
+  function handlePlayAgain(e) {
+    setYourScore(null);
+    handleReset();
+  }
+
   return (
     <div>
       <div>
         <h1>Scoreboard</h1>
-        {renderScores(scores)}
+        <ScoreTable scores={scores} yourScore={yourScore}/>
       </div>
+      <ScoreForm show={yourScore === null} place={place} isHighscore={isHighscore} handleNewScore={handleNewScore}/>
+      <button onClick={handlePlayAgain}>Play again</button>
     </div>
   );
 }
 
-function renderScores(scores) {
+function getPlace(time, scores, maxPlace) {
+  let place = 1;
+  let isHighscore = false;
+  if (!Array.isArray(scores)) {return {place: null, isHighscore};}
+
+  for (const s of scores) {
+    if (time < s.time) {
+      isHighscore = true;
+      break;
+    }
+    place++;
+  }
+
+  if (place <= maxPlace) {
+    isHighscore = true;
+  }
+
+  return {place, isHighscore};
+}
+
+function ScoreTable({scores, yourScore}) {
   if (Array.isArray(scores)) {
-    const scoresRendered = scores.map((s) => {
+    const scoresRendered = scores.map((s, i) => {
+      let rowClass = "";
+      if (yourScore !== null && yourScore === i + 1) {
+        rowClass += "Scoreboard-yourscore";
+      }
       return (
-        <tr key={s.id}>
+        <tr key={s.id} className={rowClass}>
           <td>{s.player}</td>
           <td>{timeToString(s.time)}</td>
         </tr>
       );
     });
-    console.log("Rendering scoreboard");
+
     return (
       <div>
-        <table>{scoresRendered}</table>
+        <table><tbody>{scoresRendered}</tbody></table>
       </div>
     );
   }
@@ -66,6 +117,36 @@ function renderScores(scores) {
         <h2>Downloading high scores...</h2>
       </div>
     );
+  }
+}
+
+function ScoreForm({show, place, isHighscore, handleNewScore}) {
+  if (!show || !isHighscore) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h3>Congratulations! You got {addSuffix(place)} place.</h3>
+      <form onSubmit={handleNewScore}>
+        <label htmlFor="playername">Enter your name here to post your time.</label>
+        <input type="text" id="playername" name="playername"/>
+        <button>Submit</button>
+      </form>
+    </div>
+  );
+}
+
+function addSuffix(num) {
+  switch (num) {
+    case 1:
+      return parseInt(num) + "st";
+    case 2:
+      return parseInt(num) + "nd";
+    case 3:
+      return parseInt(num) + "rd";
+    default:
+      return parseInt(num) + "th";
   }
 }
 

@@ -58,10 +58,6 @@ function FinderGame() {
     setMode("finish");
   }
 
-  function showScores() {
-    setMode("scores");
-  }
-
   function foundCharacter(name) {
     const newList = characters.map((c) => {
       if (name === c.name) {
@@ -85,7 +81,7 @@ function FinderGame() {
         <GameAreaDebug characters={characters} handleCharFound={foundCharacter}/> :
         <GameArea characters={characters} handleCharFound={foundCharacter}/>}
       <StartDialog show={mode === "reset"} characters={characters} handleStart={start}/>
-      <Scoreboard show={mode === "finish"} time={time}/>
+      <Scoreboard show={mode === "finish"} time={time} handleReset={reset}/>
     </div>
   );
 }
