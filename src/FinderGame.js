@@ -68,9 +68,7 @@ function FinderGame({characters, setCharacters, handleReset}) {
   return (
     <div>
       <StatusBar characters={characters} time={time}/>
-      {debugMode ?
-        <GameAreaDebug characters={characters} handleCharFound={foundCharacter}/> :
-        <GameArea characters={characters} handleCharFound={foundCharacter}/>}
+      <GameArea characters={characters} handleCharFound={foundCharacter}/>
       <StartDialog show={mode === "reset"} characters={characters} handleStart={start}/>
       <Scoreboard show={mode === "finish"} time={time} handleReset={handleReset}/>
     </div>
@@ -86,6 +84,10 @@ function StartupScreen() {
 
   function restart() {
     newCharList(setCharacters);
+  }
+
+  if (debugMode) {
+    return <GameAreaDebug/>;
   }
 
   if (Array.isArray(characters)) {

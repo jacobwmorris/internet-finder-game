@@ -4,7 +4,7 @@ import {newCharacter, setupCharacterListener, getRandomThree, checkGuess, getSco
 import MarkerIcon from "./images/marker.svg";
 import "./styles/GameArea.css";
 
-function GameAreaDebug({characters, handleCharFound}) {
+function GameAreaDebug() {
   const [positionMark, setPositionMark] = useState(null);
   const [radiusMark, setRadiusMark] = useState(null);
   const [guessMark, setGuessMark] = useState(null);
