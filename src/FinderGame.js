@@ -1,5 +1,5 @@
-import {useState, useRef} from "react";
-import {startEmulator} from "./Database";
+import {useState, useRef, useEffect} from "react";
+import {startEmulator, getRandomThree} from "./Database";
 import StatusBar from "./StatusBar";
 import GameArea from "./GameArea";
 import GameAreaDebug from "./GameAreaDebug";
@@ -17,11 +17,10 @@ const sampleChars = [
   {name: "Mudkip", found: false}
 ]
 
-function FinderGame() {
+function FinderGame({characters, setCharacters, handleReset}) {
   const [mode, setMode] = useState("reset");
   const [time, setTime] = useState(0);
   const timerId = useRef(null);
-  const [characters, setCharacters] = useState(sampleChars);
 
   function stopTimer() {
     if (timerId.current !== null) {
@@ -37,14 +36,6 @@ function FinderGame() {
       timerCount++;
       setTime(timerCount);
     }, 1000);
-  }
-
-  function reset() {
-    stopTimer();
-    //Get a random 3 characters from the database
-    setMode("reset");
-    setTime(0);
-    setCharacters(sampleChars);
   }
 
   function start() {
@@ -81,9 +72,52 @@ function FinderGame() {
         <GameAreaDebug characters={characters} handleCharFound={foundCharacter}/> :
         <GameArea characters={characters} handleCharFound={foundCharacter}/>}
       <StartDialog show={mode === "reset"} characters={characters} handleStart={start}/>
-      <Scoreboard show={mode === "finish"} time={time} handleReset={reset}/>
+      <Scoreboard show={mode === "finish"} time={time} handleReset={handleReset}/>
     </div>
   );
 }
 
-export default FinderGame;
+function StartupScreen() {
+  const [characters, setCharacters] = useState("loading");
+
+  useEffect(() => {
+    newCharList(setCharacters);
+  }, []);
+
+  function restart() {
+    newCharList(setCharacters);
+  }
+
+  if (Array.isArray(characters)) {
+    return <FinderGame characters={characters} setCharacters={setCharacters} handleRestart={restart}/>;
+  }
+  else if (characters === "loading") {
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
+  else {
+    return (
+      <div>
+        <h1>Loading failed.</h1>
+      </div>
+    );
+  }
+}
+
+function newCharList(set) {
+  set("loading");
+  getRandomThree()
+    .then((newChars) => {
+      newChars.forEach((c) => c.found = false);
+      set(newChars);
+    })
+    .catch((error) => {
+      console.error(error);
+      set("failed");
+    });
+}
+
+export default StartupScreen;
