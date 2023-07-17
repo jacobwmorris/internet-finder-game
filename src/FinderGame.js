@@ -17,7 +17,7 @@ const sampleChars = [
   {name: "Mudkip", found: false}
 ]
 
-function FinderGame({characters, setCharacters, handleReset}) {
+function FinderGame({characters, setCharacters, handleRestart}) {
   const [mode, setMode] = useState("reset");
   const [time, setTime] = useState(0);
   const timerId = useRef(null);
@@ -36,6 +36,13 @@ function FinderGame({characters, setCharacters, handleReset}) {
       timerCount++;
       setTime(timerCount);
     }, 1000);
+  }
+
+  function reset() {
+    setMode("reset");
+    stopTimer();
+    setTime(0);
+    handleRestart();
   }
 
   function start() {
@@ -67,10 +74,10 @@ function FinderGame({characters, setCharacters, handleReset}) {
 
   return (
     <div>
-      <StatusBar characters={characters} time={time}/>
+      <StatusBar characters={characters} time={time} handleReset={reset}/>
       <GameArea characters={characters} handleCharFound={foundCharacter}/>
       <StartDialog show={mode === "reset"} characters={characters} handleStart={start}/>
-      <Scoreboard show={mode === "finish"} time={time} handleReset={handleReset}/>
+      <Scoreboard show={mode === "finish"} time={time} handleReset={reset}/>
     </div>
   );
 }

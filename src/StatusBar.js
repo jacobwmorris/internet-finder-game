@@ -2,7 +2,7 @@ import "./styles/StatusBar.css";
 import {timeToString} from "./Helpers";
 import checkMark from "./images/check.svg";
 
-function StatusBar({characters, time}) {
+function StatusBar({characters, time, handleReset}) {
   const charactersRendered = characters.map((c) => {
     return (
       <li key={c.name} className={"StatusBar-checklist-item" + (c.found ? " StatusBar-found" : "")}>
@@ -21,7 +21,7 @@ function StatusBar({characters, time}) {
       <div className="StatusBar-right">
         Time:
         <span className="StatusBar-time">{timeToString(time)}</span>
-        <button>Restart game</button>
+        <button onClick={(e) => handleReset()}>Restart game</button>
       </div>
     </div>
   );
