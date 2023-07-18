@@ -4,7 +4,7 @@ import GuessManager from "./GuessManager";
 import MarkerIcon from "./images/marker.svg";
 import "./styles/GameArea.css";
 
-function GameArea({characters, handleCharFound}) {
+function GameArea({active, characters, handleCharFound}) {
   const [markerPos, setMarkerPos] = useState(null);
   const [guesses, setGuesses] = useState([]);
   const image = useRef(null);
@@ -41,8 +41,12 @@ function GameArea({characters, handleCharFound}) {
 
   return (
     <div className="GameArea">
-      <div className="GameArea-image" ref={image} onClick={(e) => mark(clickToPosition(e))}>
-        <GuessMarker pos={markerPos} characters={characters} handleGuess={guess}/>
+      <div
+        className={"GameArea-image" + (active ? "" : " GameArea-inactive")}
+        ref={image}
+        onClick={(e) => mark(clickToPosition(e))}
+      >
+        {active ? <GuessMarker pos={markerPos} characters={characters} handleGuess={guess}/> : null}
         {guessesRendered}
       </div>
     </div>

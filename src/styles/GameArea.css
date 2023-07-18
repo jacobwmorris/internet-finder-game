@@ -7,6 +7,10 @@
     position: relative;
 }
 
+.GameArea-inactive {
+    pointer-events: none;
+}
+
 .GameArea-markspot {
     width: 0;
     height: 0;

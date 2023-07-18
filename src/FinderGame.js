@@ -7,15 +7,10 @@ import StartDialog from "./StartDialog";
 import Scoreboard from "./Scoreboard";
 
 const debugMode = false;
-const useFirebaseEmu = true;
-if (debugMode || useFirebaseEmu) {
+const useFirebaseEmu = false;
+if (useFirebaseEmu) {
   startEmulator();
 }
-const sampleChars = [
-  {name: "Dramatic Chipmunk", found: false},
-  {name: "Chuck Testa", found: false},
-  {name: "Mudkip", found: false}
-]
 
 function FinderGame({characters, setCharacters, handleRestart}) {
   const [mode, setMode] = useState("reset");
@@ -75,7 +70,7 @@ function FinderGame({characters, setCharacters, handleRestart}) {
   return (
     <div>
       <StatusBar characters={characters} time={time} handleReset={reset}/>
-      <GameArea characters={characters} handleCharFound={foundCharacter}/>
+      <GameArea active={mode === "start"} characters={characters} handleCharFound={foundCharacter}/>
       <StartDialog show={mode === "reset"} characters={characters} handleStart={start}/>
       <Scoreboard show={mode === "finish"} time={time} handleReset={reset}/>
     </div>
