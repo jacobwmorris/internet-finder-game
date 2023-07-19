@@ -1,6 +1,14 @@
 
 :root {
   --status-bar-height: 80px;
+  --yellow: #ffd500;
+  --blue: #2f58ff;
+  --main-img-width: 1507px;
+  --main-img-height: 1058px;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 ul {

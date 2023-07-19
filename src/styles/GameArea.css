@@ -1,7 +1,7 @@
 
 .GameArea-image {
-    width: 1507px;
-    height: 1058px;
+    width: var(--main-img-width);
+    height: var(--main-img-height);
     background-image: url("../images/main.jpg");
     background-size: cover;
     position: relative;

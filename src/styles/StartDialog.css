@@ -1,0 +1,69 @@
+
+.StartDialog {
+    width: 100%;
+    height: var(--main-img-height);
+    position: absolute;
+    top: var(--status-bar-height);
+    background-color: #aaa;
+}
+
+.StartDialog-box {
+    width: 800px;
+    margin: 100px auto 0px;
+    border-width: 6px 0;
+    border-style: solid;
+    border-color: var(--yellow) var(--yellow) var(--blue);
+    border-radius: 10px;
+    padding: 20px;
+    background-color: white;
+}
+
+.StartDialog-box * {
+    text-align: center;
+}
+
+.StartDialog-list {
+    display: flex;
+    justify-content: center;
+}
+
+.StartDialog-list li {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 200px;
+    margin: 0 10px;
+}
+
+.StartDialog-name {
+    margin: 20px 0;
+}
+
+.StartDialog-pic {
+    width: 200px;
+    height: 200px;
+    border-width: 6px 1px 6px 1px;
+    border-style: solid;
+    border-color: var(--yellow) #aaa var(--blue);
+    border-radius: 10px;
+    /* border: 4px solid var(--yellow), 4px solid var(--blue), 8px solid var(--blue); */
+}
+
+.StartDialog-button {
+    display: block;
+    border: 0;
+    margin: 20px auto 0;
+    border-radius: 10px;
+    width: 120px;
+    height: 40px;
+    transition: font-size 0.2s ease-out;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    background-color: var(--blue);
+}
+
+.StartDialog-button:hover {
+    text-decoration: underline;
+    font-size: 1.05em;
+}

@@ -1,3 +1,5 @@
+import noPortrait from "./images/noportrait.png";
+import "./styles/StartDialog.css";
 
 function StartDialog({show, characters, handleStart}) {
   if (!show) {
@@ -5,34 +7,32 @@ function StartDialog({show, characters, handleStart}) {
   }
 
   const charactersRendered = characters.map((c) => {
-    return <Portrait key={c.name} name={c.name}/>;
+    return <Portrait key={c.name} name={c.name} url={c.portrait}/>;
   });
 
   return (
-    <div>
-      <div>
+    <div className="StartDialog">
+      <div className="StartDialog-box">
         <h1>Where's That Meme?</h1>
         <p>
           Look for the following internet legends in the picture.
           When you find them, click on them and then select their name.
         </p>
-        <strong>You're looking for:</strong>
-        <div>
+        <h2>You're looking for:</h2>
+        <ul className="StartDialog-list">
           {charactersRendered}
-        </div>
-        <button onClick={(e) => handleStart()}>Start game</button>
+        </ul>
+        <button className="StartDialog-button" onClick={(e) => handleStart()}>Start game</button>
       </div>
     </div>
   )
 }
 
-function Portrait({name}) {
-  //TODO: Get the character's portait from firebase
-
+function Portrait({name, url}) {
   return (
     <li>
-      <div>{name}</div>
-      <img src="#" alt={name}/>
+      <div className="StartDialog-name">{name}</div>
+      <img className="StartDialog-pic" src={url || noPortrait} alt={name}/>
     </li>
   )
 }
