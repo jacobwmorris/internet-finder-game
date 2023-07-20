@@ -6,5 +6,9 @@ service cloud.firestore {
       allow read;
       allow write: if false;
     }
+    match /highscores/{score} {
+      allow read;
+      allow create;
+    }
   }
 }
