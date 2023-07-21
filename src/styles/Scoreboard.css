@@ -1,0 +1,89 @@
+
+.Scoreboard {
+    width: 100%;
+    height: var(--main-img-height);
+    position: absolute;
+    top: var(--status-bar-height);
+    background-color: #aaa8;
+}
+
+.Scoreboard-box {
+    width: 800px;
+    margin: 100px auto 0px;
+    border-width: 6px 0;
+    border-style: solid;
+    border-color: var(--yellow) #aaa var(--blue);
+    border-radius: 10px;
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+}
+
+.Scoreboard-box > h1 {
+    margin: 0 0 20px;
+}
+
+.Scoreboard-tablebox {
+    display: flex;
+    justify-content: center;
+}
+
+.Scoreboard-table {
+    border-width: 6px 1px 6px;
+    border-style: solid;
+    border-color: var(--yellow) #aaa var(--blue);
+    border-radius: 10px;
+    border-spacing: 0;
+}
+
+.Scoreboard-table tbody tr:nth-child(odd) {
+    background-color: #eee;
+}
+
+.Scoreboard-table td, .Scoreboard-table th {
+    padding: 8px;
+}
+
+.Scoreboard-yourscore {
+    color: green;
+    font-weight: bold;
+}
+
+.Scoreboard-namefield {
+    display: flex;
+    justify-content: center;
+    margin: 8px;
+}
+
+#playername {
+    margin: 0;
+    border: 1px solid #aaa;
+    border-radius: 10px 0 0 10px;
+    height: 30px;
+}
+
+.Scoreboard-button {
+    display: block;
+    border: 0;
+    margin: 20px auto 0;
+    border-radius: 10px;
+    width: 120px;
+    height: 40px;
+    transition: font-size 0.2s ease-out;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    background-color: var(--blue);
+}
+
+.Scoreboard-formbutton {
+    margin: 0;
+    border-radius: 0 10px 10px 0;
+    width: 100px;
+    height: 30px;
+}
+
+.Scoreboard-button:hover {
+    text-decoration: underline;
+    font-size: 1.05em;
+}

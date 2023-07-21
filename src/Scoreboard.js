@@ -1,6 +1,7 @@
 import {useState, useEffect} from "react";
 import {getScoreboard, postScore} from "./Database";
 import {timeToString} from "./Helpers";
+import "./styles/Scoreboard.css";
 
 const scoreboardLength = 10;
 
@@ -52,13 +53,13 @@ function Scoreboard({show, time, handleReset}) {
   }
 
   return (
-    <div>
-      <div>
+    <div className="Scoreboard">
+      <div className="Scoreboard-box">
         <h1>Scoreboard</h1>
         <ScoreTable scores={scores} yourScore={yourScore}/>
+        <ScoreForm show={yourScore === null} place={place} isHighscore={isHighscore} handleNewScore={handleNewScore}/>
+        <button className="Scoreboard-button" onClick={handlePlayAgain}>Play again</button>
       </div>
-      <ScoreForm show={yourScore === null} place={place} isHighscore={isHighscore} handleNewScore={handleNewScore}/>
-      <button onClick={handlePlayAgain}>Play again</button>
     </div>
   );
 }
@@ -91,7 +92,7 @@ function ScoreTable({scores, yourScore}) {
         rowClass += "Scoreboard-yourscore";
       }
       return (
-        <tr key={s.id} className={rowClass}>
+        <tr className={rowClass} key={s.id}>
           <td>{s.player}</td>
           <td>{timeToString(s.time)}</td>
         </tr>
@@ -99,8 +100,18 @@ function ScoreTable({scores, yourScore}) {
     });
 
     return (
-      <div>
-        <table><tbody>{scoresRendered}</tbody></table>
+      <div className="Scoreboard-tablebox">
+        <table className="Scoreboard-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {scoresRendered}
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -129,9 +140,11 @@ function ScoreForm({show, place, isHighscore, handleNewScore}) {
     <div>
       <h3>Congratulations! You got {addSuffix(place)} place.</h3>
       <form onSubmit={handleNewScore}>
-        <label htmlFor="playername">Enter your name here to post your time.</label>
-        <input type="text" id="playername" name="playername"/>
-        <button>Submit</button>
+        <label htmlFor="playername">Enter your name here to post your time:</label>
+        <div class="Scoreboard-namefield">
+          <input type="text" id="playername" name="playername" maxLength="30"/>
+          <button className="Scoreboard-button Scoreboard-formbutton">Submit</button>
+        </div>
       </form>
     </div>
   );
