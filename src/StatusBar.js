@@ -31,15 +31,6 @@ function StatusBar({characters, time, handleReset}) {
     );
   });
 
-  <li>
-    <div className="StatusBar-checkbox">
-      <img/>
-    </div>
-    <div>
-      Name
-    </div>
-  </li>
-
   return (
     <div className="StatusBar">
       <ul className="StatusBar-checklist">
