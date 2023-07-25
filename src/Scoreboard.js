@@ -8,6 +8,7 @@ const scoreboardLength = 10;
 function Scoreboard({show, time, handleReset}) {
   const [scores, setScores] = useState("loading");
   const [yourScore, setYourScore] = useState(null);
+  const [formError, setFormError] = useState("");
 
   useEffect(() => {
     if (!show) {return;}
@@ -35,6 +36,13 @@ function Scoreboard({show, time, handleReset}) {
   function handleNewScore(e) {
     e.preventDefault();
     const playerName = e.target.elements.playername.value;
+
+    if (playerName.length < 1) {
+      setFormError("You must enter a name.");
+      return;
+    }
+
+    setScores("loading");
     postScore(playerName, time)
     .then(() => getScoreboard(10))
     .then((scoreboard) => {
@@ -57,7 +65,13 @@ function Scoreboard({show, time, handleReset}) {
       <div className="Scoreboard-box">
         <h1>Scoreboard</h1>
         <ScoreTable scores={scores} yourScore={yourScore}/>
-        <ScoreForm show={yourScore === null} place={place} isHighscore={isHighscore} handleNewScore={handleNewScore}/>
+        <ScoreForm
+          show={yourScore === null}
+          place={place}
+          isHighscore={isHighscore}
+          handleNewScore={handleNewScore}
+          errString={formError}
+        />
         <button className="Scoreboard-button" onClick={handlePlayAgain}>Play again</button>
       </div>
     </div>
@@ -131,7 +145,7 @@ function ScoreTable({scores, yourScore}) {
   }
 }
 
-function ScoreForm({show, place, isHighscore, handleNewScore}) {
+function ScoreForm({show, place, isHighscore, handleNewScore, errString}) {
   if (!show || !isHighscore) {
     return null;
   }
@@ -146,6 +160,7 @@ function ScoreForm({show, place, isHighscore, handleNewScore}) {
           <button className="Scoreboard-button Scoreboard-formbutton">Submit</button>
         </div>
       </form>
+          {errString ? <p className="Scoreboard-err">{errString}</p> : null}
     </div>
   );
 }

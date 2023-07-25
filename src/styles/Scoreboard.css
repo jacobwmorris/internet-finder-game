@@ -84,6 +84,10 @@
     height: 30px;
 }
 
+.Scoreboard-err {
+    color: red;
+}
+
 .Scoreboard-button:hover {
     text-decoration: underline;
     font-size: 1.05em;
