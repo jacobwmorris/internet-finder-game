@@ -46,7 +46,6 @@ function FinderGame({characters, setCharacters, handleRestart}) {
   }
 
   function finish() {
-    console.log("Game finished");
     stopTimer();
     setMode("finish");
   }
@@ -98,14 +97,14 @@ function StartupScreen() {
   else if (characters === "loading") {
     return (
       <div>
-        <h1>Loading...</h1>
+        <h1 style={{margin: "20px", textAlign: "center"}}>Loading...</h1>
       </div>
     );
   }
   else {
     return (
       <div>
-        <h1>Loading failed.</h1>
+        <h1 style={{margin: "20px", textAlign: "center"}}>Loading failed.</h1>
       </div>
     );
   }
