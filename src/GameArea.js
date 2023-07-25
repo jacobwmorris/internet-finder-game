@@ -1,5 +1,5 @@
 import {useState, useRef, useEffect, useLayoutEffect} from "react";
-import {numToCss, clickToPosition} from "./PositionFuncs";
+import {numToCss, clickToPosition, positionToPercent, percentToPosition} from "./PositionFuncs";
 import GuessManager from "./GuessManager";
 import MarkerIcon from "./images/marker.svg";
 import "./styles/GameArea.css";
@@ -23,7 +23,8 @@ function GameArea({active, characters, handleCharFound}) {
   }
 
   function guess(imgPos, name) {
-    guessManager.current.add(name, imgPos, 2000);
+    if (image.current === null) {return;}
+    guessManager.current.add(name, positionToPercent(imgPos, image.current.offsetWidth, image.current.offsetHeight), 2000);
     setMarkerPos(null);
   }
 
@@ -31,7 +32,7 @@ function GameArea({active, characters, handleCharFound}) {
     return (
       <GuessResult
         key={g.renderId}
-        pos={g.pos}
+        pos={percentToPosition(g.pos, image.current.offsetWidth, image.current.offsetHeight)}
         name={g.name}
         isChecked={g.isChecked}
         isCorrect={g.isCorrect}
@@ -108,7 +109,7 @@ function GuessResult({pos, name, isChecked, isCorrect}) {
       <div className="GameArea-guessspot" style={{left: numToCss(pos.x), top: numToCss(pos.y)}}>
         <div className="GameArea-guesspending">Loading...</div>
       </div>
-    )
+    );
   }
   
   return (
@@ -117,7 +118,7 @@ function GuessResult({pos, name, isChecked, isCorrect}) {
         <div className="GameArea-goodguess">Correct!</div> :
         <div className="GameArea-badguess">{incorrectMessage(name)}</div>}
     </div>
-  )
+  );
 }
 
 function incorrectMessage(name)  {

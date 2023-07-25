@@ -13,14 +13,15 @@
     pointer-events: none;
 }
 
+/* Guess mark/list */
 .GameArea-markspot {
     width: 0;
     height: 0;
     position: absolute;
     pointer-events: none;
+    z-index: 2;
 }
 
-/* Guess mark/list */
 .GameArea-mark {
     width: 30px;
     height: 30px;
@@ -73,11 +74,77 @@
 .GameArea-guessspot {
     position: absolute;
     pointer-events: none;
+    z-index: 1;
 }
 
-.GameArea-guesspending {
+.GameArea-guessspot div {
+    padding: 5px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    background-color: #fff;
     position: absolute;
     transform: translate(-50%, -50%);
+}
+
+@keyframes shake-yes {
+    from {
+        top: 10px;
+    }
+    17% {
+        top: -10px;
+    }
+    33% {
+        top: 6px;
+    }
+    50% {
+        top: -6px;
+    }
+    67% {
+        top: 3px;
+    }
+    83% {
+        top: -3px;
+    }
+    to {
+        top: 0;
+    }
+}
+
+@keyframes shake-no {
+    from {
+        left: 20px;
+    }
+    17% {
+        left: -20px;
+    }
+    33% {
+        left: 13px;
+    }
+    50% {
+        left: -13px;
+    }
+    67% {
+        left: 6px;
+    }
+    83% {
+        left: -6px;
+    }
+    to {
+        left: 0;
+    }
+}
+
+.GameArea-goodguess {
+    color: green;
+    border-color: green;
+    animation: 1s ease-out 0s 1 normal none running shake-yes;
+}
+
+.GameArea-badguess {
+    color: red;
+    border-color: red;
+    animation: 1s ease-out 0s 1 normal none running shake-no;
 }
 
 /* For debug version */

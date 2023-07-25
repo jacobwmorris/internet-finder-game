@@ -5,6 +5,7 @@
     position: absolute;
     top: var(--status-bar-height);
     background-color: #aaa8;
+    z-index: 3;
 }
 
 .Scoreboard-box {

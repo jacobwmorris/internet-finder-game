@@ -1,4 +1,5 @@
 import {v4 as uuidv4} from "uuid";
+import {checkGuess} from "./Database";
 
 class GuessManager {
     guesses = [];
@@ -42,8 +43,7 @@ class Guess {
         this.name = name;
         this.pos = pos;
 
-        //TODO: check guess with the database
-        new Promise((resolve, reject) => {setTimeout(() => resolve(true), 3000)})
+        checkGuess(name, pos)
         .then((correct) => {
             this.isChecked = true;
             this.isCorrect = correct;
