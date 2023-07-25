@@ -1,5 +1,7 @@
 
+/* Image */
 .GameArea-image {
+    margin: 0 auto;
     width: var(--main-img-width);
     height: var(--main-img-height);
     background-image: url("../images/main.jpg");
@@ -18,10 +20,7 @@
     pointer-events: none;
 }
 
-.GameArea-markspot button {
-    pointer-events: auto;
-}
-
+/* Guess mark/list */
 .GameArea-mark {
     width: 30px;
     height: 30px;
@@ -32,9 +31,45 @@
 }
 
 .GameArea-guesslist {
+    border-width: 6px 0 6px;
+    border-style: solid;
+    border-color: var(--yellow) #aaa var(--blue);
+    border-radius: 10px;
     position: absolute;
+    background-color: #fff;
 }
 
+.GameArea-guesslist > h2 {
+    margin: 0 10px;
+    padding: 10px 0;
+    white-space: nowrap;
+}
+
+.GameArea-guesslistbutton {
+    border: 0;
+    margin: 5px 10px;
+    background-color: #fff;
+    text-align: left;
+    font-size: 0.9em;
+    pointer-events: auto;
+    font-weight: bold;
+}
+
+.GameArea-guesslistbutton::first-letter {
+    color: red;
+}
+
+.GameArea-guesslistbutton span {
+    position: relative;
+    transition: left 0.2s ease-out;
+    left: 0;
+}
+
+.GameArea-guesslistbutton:hover span {
+    left: 10px;
+}
+
+/* Guess results */
 .GameArea-guessspot {
     position: absolute;
     pointer-events: none;

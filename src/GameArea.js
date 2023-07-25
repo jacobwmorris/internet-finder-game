@@ -1,4 +1,4 @@
-import {useState, useRef, useEffect} from "react";
+import {useState, useRef, useEffect, useLayoutEffect} from "react";
 import {numToCss, clickToPosition} from "./PositionFuncs";
 import GuessManager from "./GuessManager";
 import MarkerIcon from "./images/marker.svg";
@@ -54,6 +54,15 @@ function GameArea({active, characters, handleCharFound}) {
 }
 
 function GuessMarker({pos, characters, handleGuess}) {
+  const guessList = useRef(null);
+
+  useLayoutEffect(() => {
+    if (guessList.current === null || pos === null) {return;}
+
+    const listPos = positionGuessList(pos, guessList.current);
+    guessList.current.style = `left:${numToCss(listPos.x)};top:${numToCss(listPos.y)};`;
+  }, [pos]);
+
   if (pos === null) {return null}
 
   const unguessedCharsRendered = characters
@@ -61,7 +70,9 @@ function GuessMarker({pos, characters, handleGuess}) {
     .map((c) => {
       return (
         <li key={c.name}>
-          <button onClick={(e) => {e.stopPropagation(); handleGuess(pos, c.name)}}>{c.name}</button>
+          <button className="GameArea-guesslistbutton" onClick={(e) => {e.stopPropagation(); handleGuess(pos, c.name)}}>
+            {"> "}<span>{c.name}</span>
+          </button>
         </li>
       );
     });
@@ -69,7 +80,7 @@ function GuessMarker({pos, characters, handleGuess}) {
   return (
     <div className="GameArea-markspot" style={{left: numToCss(pos.x), top: numToCss(pos.y)}}>
       <img className="GameArea-mark" src={MarkerIcon} alt="Mark"/>
-      <div className="GameArea-guesslist">
+      <div className="GameArea-guesslist" ref={guessList}>
         <h2>Who is this?</h2>
         <ul>
           {unguessedCharsRendered}
@@ -77,6 +88,18 @@ function GuessMarker({pos, characters, handleGuess}) {
       </div>
     </div>
   );
+}
+
+function positionGuessList(pos, list) {
+  const img = document.querySelector(".GameArea-image");
+  const h2 = list.firstChild;
+  const desiredX = 20, desiredY = -h2.offsetHeight / 2 - 6;
+  const overflowX = (pos.x + desiredX + list.offsetWidth) - img.offsetWidth;
+  const overflowY = (pos.y + desiredY + list.offsetHeight) - img.offsetHeight;
+  return {
+    x: (overflowX > 0) ? -list.offsetWidth - desiredX : desiredX,
+    y: (overflowY > 0) ? desiredY - overflowY : desiredY
+  };
 }
 
 function GuessResult({pos, name, isChecked, isCorrect}) {

@@ -17,6 +17,7 @@ function StartDialog({show, characters, handleStart}) {
         <p>
           Look for the following internet legends in the picture.
           When you find them, click on them and then select their name.
+          If you need to, you can mouse over the names in the checklist to see their pictures again.
         </p>
         <h2>You're looking for:</h2>
         <ul className="StartDialog-list">
