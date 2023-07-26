@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/internet-finder-game/static/css/main.f1c5b0f0.css",
+    "main.js": "/internet-finder-game/static/js/main.0cad03be.js",
+    "static/media/main.jpg": "/internet-finder-game/static/media/main.a84c1eb9146434cb9d9a.jpg",
+    "static/media/noportrait.png": "/internet-finder-game/static/media/noportrait.e565cc27f305a176aadc.png",
+    "index.html": "/internet-finder-game/index.html",
+    "static/media/marker.svg": "/internet-finder-game/static/media/marker.faa4e6973f84afa313aaa9610a268942.svg",
+    "static/media/check.svg": "/internet-finder-game/static/media/check.82b3e8eb06d19da790e33febca22d913.svg",
+    "main.f1c5b0f0.css.map": "/internet-finder-game/static/css/main.f1c5b0f0.css.map",
+    "main.0cad03be.js.map": "/internet-finder-game/static/js/main.0cad03be.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f1c5b0f0.css",
+    "static/js/main.0cad03be.js"
+  ]
+}
